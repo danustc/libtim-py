@@ -203,7 +203,7 @@ def calc_zern_infmat(subaps, nzern=10, zerncntr=None, zernrad=-1.0, singval=1.0,
 				show_shwfs_vecs(subaps[:,::2]*0, subaps, img=None, extent=extent, title=None, scale=10, pause=False, fignum=None, keep=True)
 				aprad = plt.Circle(tuple(zerncntr[::-1]), radius=rad, alpha=0.5)
 				thisgca = plt.gca(); thisgca.add_artist(aprad)
-				raw_input("...")
+				input("...")
 			raise ValueError("Not all sub apertures in Zernike radius!")
 
 	slopes = (np.indices(sasize, dtype=float)/(np.r_[sasize].reshape(-1,1,1))).reshape(2,-1)
@@ -224,7 +224,7 @@ def calc_zern_infmat(subaps, nzern=10, zerncntr=None, zernrad=-1.0, singval=1.0,
 			show_shwfs_vecs(plslope, subaps, img=zbase, extent=extent, title=None, scale=10, pause=False, fignum=None, keep=True)
 			plt.plot(zerncntr[1], zerncntr[0], 'p', markersize=20)
 
-			raw_input("continue...")
+			input("continue...")
 			plt.close()
 
 	# np.linalg.pinv() takes the cutoff wrt the *maximum*, we want a cut-off
@@ -241,7 +241,7 @@ def calc_zern_infmat(subaps, nzern=10, zerncntr=None, zernrad=-1.0, singval=1.0,
 		pseudo_i = np.dot(zern_inv_mat, zernslopes)
 		quality = np.trace(pseudo_i)/np.sum(pseudo_i)
 		if (verb>2):
-			print "calc_zern_infmat(): quality: %.g, singval: %.g"
+			print("calc_zern_infmat(): quality: %.g, singval: %.g")
 		# @todo What was the idea of this check?
 		#if (quality < singval*0.8):
 
@@ -340,7 +340,7 @@ def find_mla_grid(wfsimg, size, clipsize=None, minif=0.6, nmax=-1, copy=True, me
 		plt.title("MLA grid")
 		thisgca = plt.gca()
 		thisgca.add_collection(PatchCollection(mlapatches_im, match_original=True))
-		raw_input("...")
+		input("...")
 		plt.close()
 
 	
@@ -453,7 +453,7 @@ def locate_acts(infmat, subappos, nsubap=20, weigh=True, verb=0):
 		if (verb > 2):
 			plt.plot([actpos[1]],
 					[actpos[0]],  'x')
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 			plt.close()
 		
 		actposl.append(actpos)
@@ -555,7 +555,7 @@ def show_shwfs_vecs(shiftvec, subaps, refpos=None, img=None, extent=None, title=
 	thisgca = plt.gca()
 	thisgca.add_collection(PatchCollection(subaps_im, match_original=True))
 
-	if (pause): raw_input("Press any key to continue...")
+	if (pause): input("Press any key to continue...")
 	if (not keep): plt.close()
 
 def sim_shwfs(wave, mlagrid, pad=True, scale=2):

@@ -21,7 +21,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import pyfits
 import json
-import cPickle
+import pickle
 import string
 import os, shutil
 import fnmatch
@@ -99,15 +99,15 @@ def read_file(fpath, dtype=None, roi=None, squeeze=False, bin=None, **kwargs):
 	elif (dtype == 'npz'):
 		# NPZ needs numpy
 		datadict = np.load(fpath, **kwargs)
-		if (len(datadict.keys()) > 1):
-			print >> sys.stderr, "Warning! Multiple files stored in archive '%s', returning only the first" % (fpath)
-		data = datadict[datadict.keys()[0]]
+		if (len(list(datadict.keys())) > 1):
+			print("Warning! Multiple files stored in archive '%s', returning only the first" % (fpath), file=sys.stderr)
+		data = datadict[list(datadict.keys())[0]]
 	elif (dtype == 'csv'):
 		# CSV needs Numpy.loadtxt
 		data = np.loadtxt(fpath, delimiter=',', **kwargs)
 	elif (dtype == 'pickle'):
 		fp = open(fpath, 'r')
-		data = cPickle.load(fp, **kwargs)
+		data = pickle.load(fp, **kwargs)
 		fp.close()
 		# Return immediately, no ROI applicable
 		return data
@@ -306,7 +306,7 @@ def store_file(fpath, data, **kwargs):
 		fp.close()
 	elif (dtype == 'pickle'):
 		fp = open(fpath, 'w')
-		cPickle.dump(data, fp, **kwargs)
+		pickle.dump(data, fp, **kwargs)
 		fp.close()
 	else:
 		raise ValueError("Unsupported filetype '%s'" % (dtype))
@@ -322,7 +322,7 @@ def backup_file(path):
 	"""
 
 	newpath = path + '.bak000000'
-	for i in xrange(1000000):
+	for i in range(1000000):
 		newpath = path + '.bak%06d' % (i)
 		if (not os.path.exists(newpath)):
 			break
@@ -370,7 +370,7 @@ def read_from_dir(ddir, n=-1, purge=True, glob="*", dry=False, movedir=False):
 			rate = n_got / (cycle * sleeptime)
 			eta = float("inf")
 			if (rate): eta = (n+1-n_got) / rate
-			print "read_from_dir(): still waiting for files, got %d/%d, eta: %g sec" % (n_got, n+1, eta)
+			print("read_from_dir(): still waiting for files, got %d/%d, eta: %g sec" % (n_got, n+1, eta))
 			#print "read_from_dir(): got: ", filtlist
 
 		flist = os.listdir(ddir)

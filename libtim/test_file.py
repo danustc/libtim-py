@@ -11,7 +11,7 @@
 Unittests for libtim.file
 """
 
-from file import *
+from .file import *
 import numpy as np
 import unittest
 
@@ -41,11 +41,11 @@ class TestReadWriteFiles(unittest.TestCase):
 		"""Test read_file calls"""
 
 		# These should all raise an IOerror
-		with self.assertRaisesRegexp(IOError, "No such file or directory"):
+		with self.assertRaisesRegex(IOError, "No such file or directory"):
 			read_file('nonexistent.file', None)
 
 		for fmt in self.allformats:
-			with self.assertRaisesRegexp(IOError, "No such file or.*"):
+			with self.assertRaisesRegex(IOError, "No such file or.*"):
 				read_file('nonexistent.file', fmt)
 
 	def test1c_write_file(self):

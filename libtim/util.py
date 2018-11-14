@@ -23,7 +23,7 @@ import os
 import hashlib
 import pyfits
 from time import asctime, gmtime, time, localtime
-import cPickle
+import pickle
 import json
 
 #============================================================================
@@ -87,7 +87,7 @@ def find_uniq(strlist, tokenize=True, tokens=['.', '-', '_', '/']):
 		### Loop over all files. For each consecutive pair of files, check if
 		# the prefix and postfix substrings are equal. If not, trim the prefix
 		# and postfix length by one token and continue until they are equal.
-		for idx in xrange(len(strlist)-1):
+		for idx in range(len(strlist)-1):
 			if (len(strlist[idx]) != len(strlist[idx+1])):
 				raise ValueError("Input string list are not of equal length!")
 			while (strlist[idx][:tokpos_f[pre_idx]] != strlist[idx+1][:tokpos_f[pre_idx]]):
@@ -114,7 +114,7 @@ def find_uniq(strlist, tokenize=True, tokens=['.', '-', '_', '/']):
 		postlen = 0
 
 		# At this point, prelen and postlen can only get shorter:
-		for idx in xrange(1, len(strlist)-1):
+		for idx in range(1, len(strlist)-1):
 			if (len(strlist[idx]) != len(strlist[idx+1])):
 				raise ValueError("Input string list are not of equal length!")
 			while (strlist[idx][:prelen] != strlist[idx+1][:prelen]):
@@ -216,7 +216,7 @@ def parse_range_str(rstr, sep=",", rsep="-", offs=0):
 		el = el.strip()
 		if (rsep in el[1:]):
 			spl_idx = el[1:].find(rsep)+1
-			els.extend( range(int(el[:spl_idx]), int(el[spl_idx+1:])+1) )
+			els.extend( list(range(int(el[:spl_idx]), int(el[spl_idx+1:])+1)) )
 		else:
 			els.append( int(el) )
 	# Apply offset and return
@@ -316,7 +316,7 @@ def store_metadata(metadict, basename, dir='./', aspickle=False, asjson=True):
 	if (aspickle):
 		pickle_file = basepath + "_meta.pickle"
 		fp = open(pickle_file, 'w')
-		cPickle.dump(metadict, fp)
+		pickle.dump(metadict, fp)
 		fp.close()
 		outfiles['pickle'] = pickle_file
 	if (asjson):
@@ -348,7 +348,7 @@ def load_metadata(infile, format='json'):
 		fp.close()
 	elif (format.lower() == 'pickle'):
 		fp = open(infile, 'r')
-		metad = cPickle.load(fp)
+		metad = pickle.load(fp)
 		fp.close()
 
 	return metad
@@ -407,7 +407,7 @@ def mkfitshdr(cards=None, usedefaults=True):
 								comment='Hostname from os.uname()') )
 
 	if (cards):
-		for key, val in cards.iteritems():
+		for key, val in cards.items():
 			clist.append(pyfits.Card(key, val) )
 
 	return pyfits.Header(cards=clist)

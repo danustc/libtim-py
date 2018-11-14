@@ -27,8 +27,8 @@ from matplotlib.backends.backend_pdf import FigureCanvasPdf as FigureCanvas
 import datetime
 import warnings
 
-from file import filenamify
-from util import mkfitshdr
+from .file import filenamify
+from .util import mkfitshdr
 
 #=============================================================================
 # Defines
@@ -109,7 +109,7 @@ def mk_rad_prof(data, center=None, maxrange=None, step=1, procf=np.mean):
 
 	# Make radial profile using <step> pixel wide annuli with increasing 
 	# radius until <maxrange>. Calculate the mean in each annulus
-	profile = [procf(data[(rad_mask >= i) & (rad_mask < i+step)]) for i in xrange(0, maxrange, step)]
+	profile = [procf(data[(rad_mask >= i) & (rad_mask < i+step)]) for i in range(0, maxrange, step)]
 
 	return np.r_[profile]
 
@@ -206,7 +206,7 @@ def store_2ddata(data, fname, pltitle='', dir='./', fits=False, plot=True, plran
 
 	if (fits):
 		# Generate some metadata. Also store plot settings here
-		hdr_dict = dict({'filename':fitsfile, 
+		hdr_dict = dict(list({'filename':fitsfile, 
 				'desc':fname, 
 				'title':pltitle,
 				'plxlab': xlab,
@@ -216,8 +216,8 @@ def store_2ddata(data, fname, pltitle='', dir='./', fits=False, plot=True, plran
 				'plcmap': cmap,
 				'plrng0': plrange[0] if plrange[0] else 0,
 				'plrng1': plrange[1] if plrange[1] else 0,
-				}.items()
-				+ dict(hdr).items())
+				}.items())
+				+ list(dict(hdr).items()))
 		hdr = mkfitshdr(hdr_dict)
 		# Store data to disk
 		pyfits.writeto(fitspath, data_arr, header=hdr, clobber=True, checksum=True)
@@ -291,7 +291,7 @@ def inter_imshow(data, desc="", doshow=True, dowait=True, log=False, rollaxes=Fa
 		return
 
 	import pylab as plt
-	print "inter_imshow(): " + desc
+	print("inter_imshow(): " + desc)
 
 	# Pre-format data
 	data_arr = np.asanyarray(data)
@@ -316,4 +316,4 @@ def inter_imshow(data, desc="", doshow=True, dowait=True, log=False, rollaxes=Fa
 
 	# If we want to wait, ask user for input, discard it and continue
 	if (dowait):
-		raw_input()
+		input()

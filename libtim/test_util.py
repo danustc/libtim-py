@@ -10,7 +10,7 @@
 #============================================================================
 
 import unittest
-from util import *
+from .util import *
 
 #============================================================================
 # Unit tests
@@ -95,14 +95,14 @@ class TestUptime(unittest.TestCase):
 
 	def test2_parse_all(self):
 		"""Test function with all input data"""
-		for key, data in self.samples.iteritems():
+		for key, data in self.samples.items():
 			for instr in data:
 				parsed = parse_uptime(instr)
 				t, u, n, l = parsed
 
 	def test3_confirm_all(self):
 		"""Test function with all input data"""
-		for key in self.samples.keys():
+		for key in list(self.samples.keys()):
 			for instr, resp in zip(self.samples[key], self.resp[key]):
 				parsed = parse_uptime(instr)
 				t, u, n, l = parsed
@@ -144,7 +144,7 @@ class TestMetaData(unittest.TestCase):
 
 	def tearDown(self):
 		"""Delete testfiles if necessary"""
-		for format, file in self.outfiles.iteritems():
+		for format, file in self.outfiles.items():
 			if (file and os.path.isfile(file)):
 				os.remove(file)
 
@@ -180,7 +180,7 @@ class TestMetaData(unittest.TestCase):
 		self.outfiles = store_metadata(thismeta, 'TestMetaData', dir='/tmp/', aspickle=True, asjson=True)
 
 		# Load all formats, compare with input dict
-		for format, file in self.outfiles.iteritems():
+		for format, file in self.outfiles.items():
 			if (file and os.path.isfile(file)):
 				self.assertTrue(os.path.isfile(file))
 				inmeta = load_metadata(file, format)
@@ -191,7 +191,7 @@ class TestMetaData(unittest.TestCase):
 		data = gen_metadata(self.meta)
 		self.assertTrue(os.path.isdir(data['curdir']))
 		self.assertTrue(os.path.exists(data['program']))
-		self.assertTrue('argv' in data.keys())
+		self.assertTrue('argv' in list(data.keys()))
 		self.assertGreater(data['epoch'], 1382029054)
 		self.assertGreater(len(data['utctime']), 10)
 		self.assertGreater(len(data['localtime']), 10)
@@ -300,7 +300,7 @@ class TestTokenize(unittest.TestCase):
 		"""Test synthetic list of tokenization"""
 
 		# Longer synthetic data, unique subset are dates and file indices
-		self.strl2 = ["unibrain-frame-201109%02d_%04d.ppm.png" % (dd, idx % 1000) for dd in xrange(8,12) for idx in xrange(0,128*512,7*512)]
+		self.strl2 = ["unibrain-frame-201109%02d_%04d.ppm.png" % (dd, idx % 1000) for dd in range(8,12) for idx in range(0,128*512,7*512)]
 		el0 = self.strl2[0]
 
 		tp = find_uniq(self.strl2, tokenize=True, tokens=['.', '-', '_'])
@@ -318,7 +318,7 @@ class TestTokenize(unittest.TestCase):
 	def test1c_test_alluniq(self):
 		"""Test list of strings which are all unique"""
 
-		self.strl5 = ["%02d_%04d" % (dd, idx % 1000) for dd in xrange(8,12) for idx in xrange(0,128*512,7*512)]
+		self.strl5 = ["%02d_%04d" % (dd, idx % 1000) for dd in range(8,12) for idx in range(0,128*512,7*512)]
 		el0 = self.strl5[0]
 
 		tp = find_uniq(self.strl5, tokenize=True, tokens=['.', '-', '_'])
@@ -356,7 +356,7 @@ class TestTokenize(unittest.TestCase):
 		"""Test if varying string length raises ValueError"""
 
 		# Varying length data
-		self.strl3 = ["unibrain-frame-201109%d_%d.ppm.png" % (dd, idx % 1000) for dd in xrange(8,12) for idx in xrange(0,128*512,7*512)]
+		self.strl3 = ["unibrain-frame-201109%d_%d.ppm.png" % (dd, idx % 1000) for dd in range(8,12) for idx in range(0,128*512,7*512)]
 
 		self.assertRaises(ValueError, find_uniq, self.strl3, tokenize=True, tokens=['.', '-', '_'])
 		self.assertRaises(ValueError, find_uniq, self.strl3, tokenize=False, tokens=['.', '-', '_'])

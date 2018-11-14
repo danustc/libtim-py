@@ -11,13 +11,14 @@
 Testcases for zern.py library.
 """
 
-from zern import *
+from .zern import *
 import unittest
 import libtim.im
 import pylab as plt
 import pyfits
 from timeit import Timer
 import os
+from functools import reduce
 
 SHOWPLOTS=False
 
@@ -37,7 +38,7 @@ class PlotZernikes(unittest.TestCase):
 		if (not SHOWPLOTS):
 			return
 		rad = 257
-		for idx in xrange(100):
+		for idx in range(100):
 			vec = [0]*(idx+1)
 			vec[idx] = 1
 			mode = calc_zernike(vec, rad, mask=True)
@@ -156,7 +157,7 @@ class TestZernikes(unittest.TestCase):
 	def test2b_zern_calc(self):
 		"""Compare calc_zernike output with pre-computed basis"""
 		vec = [0]*self.nmodes
-		for i in xrange(self.nmodes):
+		for i in range(self.nmodes):
 			vec[i] = 1
 			testzern = calc_zernike(vec, self.rad, mask=False)
 			self.assertTrue(np.allclose(self.basis[i], testzern))
@@ -310,7 +311,7 @@ vec = np.random.random(nmodes)
 
 		t_cached = min(t1.repeat(2, self.calc_iter))/self.calc_iter
 		t_nocache = min(t2.repeat(2, self.calc_iter))/self.calc_iter
-		print "test3b_timing_calc(): rad=257, nmodes=25 cache: %.3g s/it no cache: %.3g s/it" % (t_cached, t_nocache)
+		print("test3b_timing_calc(): rad=257, nmodes=25 cache: %.3g s/it no cache: %.3g s/it" % (t_cached, t_nocache))
 
 	def test3c_timing_fit(self):
 		"""Test Zernike fitting performance"""
@@ -329,7 +330,7 @@ wf = np.random.random((rad, rad))
 
 		t_cached = min(t1.repeat(2, self.fit_iter))/self.fit_iter
 		# Caching should be at least twice as fast as no caching
-		print "test3c_timing_fit(): rad=257, nmodes=25 %.3g sec/it" % (t_cached)
+		print("test3c_timing_fit(): rad=257, nmodes=25 %.3g sec/it" % (t_cached))
 
 if __name__ == "__main__":
 	import sys

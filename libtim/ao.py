@@ -8,8 +8,8 @@
 @copyright Copyright (c) 2013 Tim van Werkhoven (werkhoven@strw.leidenuniv.nl)
 """
 
-import im
-import zern
+from . import im
+from . import zern
 import warnings
 import numpy as np
 import pylab as plt
@@ -119,11 +119,11 @@ def comp_influence(measmat, actmat, binfac=None, singval=1.0, nmodes=0, add_offs
 	infl['offsetact'] = offvec = -np.dot(infl['ctrlmat'], infl['offsetmeas'])
 
 	if (np.abs(offvec).max() > 1.0):
-		print "Offset correction actuation, reg.: ", " ".join("%.2g" % e for e in offvec.flat)
+		print("Offset correction actuation, reg.: ", " ".join("%.2g" % e for e in offvec.flat))
 		warnings.warn("Saturation in offset correction vector, static optical errors are large or calibration failed!")
-		raw_input("Continue..")
+		input("Continue..")
 	elif (verb):
-		print "Offset correction actuation, reg.: ", " ".join("%.2g" % e for e in offvec.flat)
+		print("Offset correction actuation, reg.: ", " ".join("%.2g" % e for e in offvec.flat))
 
 	return infl
 
@@ -191,7 +191,7 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 		plt.ylabel("Residual singval [AU]")
 		plt.semilogy(1-svd_s.cumsum()/svd_s.sum())
 		if (store): plt.savefig(pjoin(outdir, "cal_singvals_cumsum_logy.pdf"))
-		if (interactive): raw_input("Continue...")
+		if (interactive): input("Continue...")
 
 	if (what in ["all", "offset"]):
 		# Init new empty image
@@ -206,7 +206,7 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 		plt.imshow(thisvec*plot_mask, vmin=imin, vmax=imax)
 		plt.colorbar()
 		if (store): plt.savefig(pjoin(outdir, "cal_offset_phase.pdf"))
-		if (interactive): raw_input("Continue...")
+		if (interactive): input("Continue...")
 
 	if (what in ["all", "actrec"]):
 		plt.figure(fignum0+250); plt.clf()
@@ -225,7 +225,7 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 		plt.imshow((actmat[:-1]-infldat['actmat_rec']).T)
 		plt.colorbar()
 		if (store): plt.savefig(pjoin(outdir, "cal_actmat_rec.pdf"))
-		if (interactive): raw_input("Continue...")
+		if (interactive): input("Continue...")
 
 	if (what in ["all", "actmat"]):
 		# Init new empty image
@@ -242,7 +242,7 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 			plt.colorbar()
 			if (store): plt.savefig(pjoin(outdir, "cal_infl_vec_%d.pdf" % (idx)))
 			if (interactive): 
-				if (raw_input("Continue [b=break]...") == 'b'): break
+				if (input("Continue [b=break]...") == 'b'): break
 
 	if (what in ["all", "sysmodes"]):
 		# Init new empty image
@@ -259,7 +259,7 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 			plt.colorbar()
 			if (store): plt.savefig(pjoin(outdir, "cal_dm_base_vec_%d.pdf" % (idx)))
 			if (interactive):
-				if (raw_input("Continue [b=break]...") == 'b'): break
+				if (input("Continue [b=break]...") == 'b'): break
 
 	if (what in ["measrec"]):
 		measmat_rec = np.dot(infldat['inflmat'], actmat[:-1])
@@ -276,8 +276,8 @@ def inspect_influence(actmat, measmat, apt_mask, infldat=None, what="all", fignu
 			plt.colorbar()
 			if (store): plt.savefig(pjoin(outdir, "cal_infl_vec_%d_rec.pdf" % (idx)))
 			if (interactive):
-				if (raw_input("Continue [b=break]...") == 'b'): break
+				if (input("Continue [b=break]...") == 'b'): break
 
-	raw_input("Will now exit and close windows...")
+	input("Will now exit and close windows...")
 	for fnum in [100, 101, 102, 200, 250, 300, 400, 500]:
 		plt.figure(fignum0 + fnum); plt.close()

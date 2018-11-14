@@ -30,6 +30,7 @@ import libtim.im
 #==========================================================================
 
 from scipy.misc import factorial as fac
+from functools import reduce
 def zernike_rad(m, n, rho):
 	"""
 	Make radial Zernike polynomial on coordinate grid **rho**.
@@ -130,8 +131,8 @@ def fix_noll_map(max):
 	This function repairs data generated with noll_to_zern_broken().
 	"""
 	return [(jold, jnew)
-		for jold in xrange(max)
-			for jnew in xrange(1, max)
+		for jold in range(max)
+			for jnew in range(1, max)
 				if (noll_to_zern_broken(jold) == noll_to_zern(jnew))]
 
 def zern_normalisation(nmodes=30):
@@ -144,7 +145,7 @@ def zern_normalisation(nmodes=30):
 	@see <http://research.opt.indiana.edu/Library/VSIA/VSIA-2000_taskforce/TOPS4_2.html> and <http://research.opt.indiana.edu/Library/HVO/Handbook.html>.
 	"""
 
-	nolls = (noll_to_zern(j+1) for j in xrange(nmodes))
+	nolls = (noll_to_zern(j+1) for j in range(nmodes))
 	norms = [(2*(n+1)/(1+(m==0)))**0.5 for n, m  in nolls]
 	return np.asanyarray(norms)
 
@@ -182,7 +183,7 @@ def calc_zern_basis(nmodes, rad, modestart=1, calc_covmat=False):
 	grid_mask = grid_rad <= 1
 
 	# Build list of Zernike modes, these are *not* masked/cropped
-	zern_modes = [zernikel(zmode, grid_rad, grid_ang) for zmode in xrange(modestart, nmodes+modestart)]
+	zern_modes = [zernikel(zmode, grid_rad, grid_ang) for zmode in range(modestart, nmodes+modestart)]
 
 	# Convert modes to (nmodes, npixels) matrix
 	zern_modes_mat = np.r_[zern_modes].reshape(nmodes, -1)
@@ -247,7 +248,7 @@ def fit_zernike(wavefront, zern_data={}, nmodes=10, startmode=1, fitweight=None,
 	yslice = slice(center[1]-rad, center[1]+rad)
 
 	# Compute Zernike basis if absent
-	if (not zern_data.has_key('modes')):
+	if ('modes' not in zern_data):
 		tmp_zern = calc_zern_basis(nmodes, rad)
 		zern_data['modes'] = tmp_zern['modes']
 		zern_data['modesmat'] = tmp_zern['modesmat']
@@ -329,7 +330,7 @@ def calc_zernike(zern_vec, rad, zern_data={}, mask=True):
 	"""
 
 	# Compute Zernike basis if absent
-	if (not zern_data.has_key('modes')):
+	if ('modes' not in zern_data):
 		tmp_zern = calc_zern_basis(len(zern_vec), rad)
 		zern_data['modes'] = tmp_zern['modes']
 		zern_data['modesmat'] = tmp_zern['modesmat']

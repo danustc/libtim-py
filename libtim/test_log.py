@@ -17,7 +17,7 @@ Logging functions to log data using prefixes, loglevels and permanent logfiles. 
 # Import libraries here
 #==========================================================================
 
-from log import *
+from .log import *
 import os
 import unittest
 

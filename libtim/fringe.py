@@ -269,7 +269,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 
 	if (method == 'spectral'):
 		# 1a. Calculate shift matrix
-		if cache.has_key('spec_sshift'):
+		if 'spec_sshift' in cache:
 			sshift = cache['spec_sshift']
 		else:
 			slope = np.indices(img.shape, dtype=np.float) / np.r_[img.shape].reshape(-1,1,1)
@@ -281,7 +281,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 		img_sh = (img - img.mean()) * sshift
 
 		# 2. Apodise image (0.280ms)
-		if cache.has_key('spec_apodmask'):
+		if 'spec_apodmask' in cache:
 			apod_mask = cache['spec_apodmask']
 		else:
 			apod_mask = tim.fft.mk_apod_mask(img.shape, wsize=wsize, shape='circ', apod_f=wfunc)
@@ -297,7 +297,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 
 		# 3. Lowpass filter (1.3ms)
 		lowpass = (1+do_embed) * sbsize * (np.r_[cfreq]**2.0).sum()**0.5
-		if cache.has_key('spec_lowpassmask'):
+		if 'spec_lowpassmask' in cache:
 			lowpass_mask = cache['spec_lowpassmask']
 		else:
 			lowpass_mask = tim.fft.mk_apod_mask(img_sh_ft.shape, apodsz=lowpass*2, shape='circle', wsize=-.5, apod_f=wfunc)
@@ -343,7 +343,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 
 	elif (method == 'passband'):
 		# 1. Apodise data, Fourier transform
-		if cache.has_key('pass_apodmask'):
+		if 'pass_apodmask' in cache:
 			apod_mask = cache['pass_apodmask']
 		else:
 			apod_mask = tim.fft.mk_apod_mask(img.shape, wsize=wsize, apod_f=wfunc)
@@ -353,7 +353,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 		img_ft = tim.fft.descramble(np.fft.fft2(img_apod))
 
 		# 2. Bandpass filter around carrier frequency
-		if cache.has_key('pass_filtmask'):
+		if 'pass_filtmask' in cache:
 			filt_mask = cache['pass_filtmask']
 		else:
 	 		fa_inner = sbsize * (np.r_[cfreq]**2.0).sum()**0.5
@@ -407,7 +407,7 @@ def filter_sideband(img, cfreq, sbsize, method='spectral', apt_mask=None, unwrap
 
 		# 5. Calculate slope to subtract
 		## @todo This can be improved by using orthogonal vectors
-		if cache.has_key('pass_slope'):
+		if 'pass_slope' in cache:
 			slope = cache['pass_slope']
 		else:
 			slope = np.indices(phase.shape, dtype=np.float) / np.r_[phase.shape].reshape(-1,1,1)

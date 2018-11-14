@@ -103,26 +103,26 @@ def log_msg(verb, msg, err=EXIT):
 		tm = time.localtime()
 		global LOGLASTDAY
 		if (LOGLASTDAY != tm[2]):
-			print >> LOGFD, "-"*20, time.asctime(tm), "-"*20
+			print("-"*20, time.asctime(tm), "-"*20, file=LOGFD)
 			LOGLASTDAY = tm[2]
-		print >> LOGFD, time.strftime("%H:%M:%S", tm), LVLDESC[verb], msg
+		print(time.strftime("%H:%M:%S", tm), LVLDESC[verb], msg, file=LOGFD)
 		LOGFD.flush()
 	# Then print to screen
 	if (VERBOSITY >= verb):
 		if (verb >= INFO):
 			sys.stdout.write(DEBUGCL)
-			print LVLDESC[verb], msg, RESETCL
+			print(LVLDESC[verb], msg, RESETCL)
 		elif (verb == WARNING):
 			sys.stdout.write(WARNCL)
-			print LVLDESC[verb], msg, RESETCL
+			print(LVLDESC[verb], msg, RESETCL)
 		elif (verb <= ERR):
 			sys.stdout.write(ERRORCL)
-			print LVLDESC[verb], msg, RESETCL
+			print(LVLDESC[verb], msg, RESETCL)
 			# If we have an error, close the file, or data might be lost
 			if LOGFD: LOGFD.close()
 			sys.exit(err)
 		else:
-			print LVLDESC[verb], msg
+			print(LVLDESC[verb], msg)
 
 def prNot(verb, msg, err=EXIT):
 	"""

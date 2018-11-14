@@ -18,7 +18,7 @@ Measure image shifts using cross-correlation and other utilities.
 #==========================================================================
 
 import numpy as np
-import fft as _fft
+from . import fft as _fft
 import scipy.ndimage
 import scipy.ndimage.fourier
 
@@ -83,8 +83,8 @@ def crosscorr(imlst, shrange, dsh=(1,1), refim=None):
 		xcorr_mat = [[
 			np.r_[ [[
 			np.sum(refim[sh0+shi:imsz0-sh0+shi, sh1+shj:imsz1-sh1+shj] * fj[sm_crop])
-			for shj in xrange(-sh1, sh1+1, dsh1)]
-				for shi in xrange(-sh0, sh0+1, dsh0)]
+			for shj in range(-sh1, sh1+1, dsh1)]
+				for shi in range(-sh0, sh0+1, dsh0)]
 				] # // np.r_
 					for fj in imlst]]
 	# Calculate correlation for all files with each other (output NxN)
@@ -92,8 +92,8 @@ def crosscorr(imlst, shrange, dsh=(1,1), refim=None):
 		xcorr_mat = [[
 			np.r_[ [[
 			np.sum(fi[sh0+shi:imsz0-sh0+shi, sh1+shj:imsz1-sh1+shj] * fj[sm_crop])
-			for shj in xrange(-sh1, sh1+1, dsh1)]
-				for shi in xrange(-sh0, sh0+1, dsh0)]
+			for shj in range(-sh1, sh1+1, dsh1)]
+				for shi in range(-sh0, sh0+1, dsh0)]
 				] # // np.r_
 					for fj in imlst]
 						for fi in imlst]
@@ -123,8 +123,8 @@ def crosscorr1(img, refim, shrange, dsh=(1,1)):
 	# Calculate correlation for img with <refim>
 	xcorr = np.r_[ [[
 		np.sum(refim[sh0+shi:imsz0-sh0+shi, sh1+shj:imsz1-sh1+shj] * img[sm_crop])
-		for shj in xrange(-sh1, sh1+1, dsh1)]
-			for shi in xrange(-sh0, sh0+1, dsh0)]
+		for shj in range(-sh1, sh1+1, dsh1)]
+			for shi in range(-sh0, sh0+1, dsh0)]
 				] # // np.r_
 
 	return xcorr
@@ -160,7 +160,7 @@ def plot_img_mat(img_mat, fignum=0, pause=True, pltit="", **kwargs):
 
 	plt.show()
 	if (pause):
-		raw_input()
+		input()
 
 def gauss(sz, spotsz, spotpos, amp, noiamp=0):
 	"""
@@ -344,7 +344,7 @@ def calc_subpixmax(data, offset=(0,0), dimension=2, index=False, error=False):
 			(2*a3*a4-a2*a6)/(a6*a6-4*a3*a5)])
 		# Subpixel vector should be smaller than 1
 		if ((np.abs(v) > 1).any()):
-			if (error): print '!! 2D QI failed:', v
+			if (error): print('!! 2D QI failed:', v)
 			dimension = 1
 	# 1D Quadratic Interpolation
 	# no elif here because we might need this from 2D fallback
@@ -352,7 +352,7 @@ def calc_subpixmax(data, offset=(0,0), dimension=2, index=False, error=False):
 		v = np.array([a2/(2*a3), a4/(2*a5)])
 		# Subpixel vector should be smaller than 1
 		if ((np.abs(v) > 1).any()):
-			if (error): print '!! 1D QI failed:', v
+			if (error): print('!! 1D QI failed:', v)
 			dimension = 0
 	# 0D: Maximum value pixel (keep here as fallback if 1D, 2D fail)
 	# no elif here because we might need this from 1D fallback

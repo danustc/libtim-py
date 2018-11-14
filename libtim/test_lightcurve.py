@@ -14,7 +14,7 @@ nosetests-2.7 --with-profile ./test_lightcurve.py
 Testcases for lightcurve.py library.
 """
 
-from lightcurve import *
+from .lightcurve import *
 import unittest
 import pylab as plt
 import pyfits
@@ -34,7 +34,7 @@ def plotfunc(testdat, refdat, fignum, pause=True):
 	plt.plot(testdat/refdat, label='ratio')
 	plt.legend()
 	if (pause):
-		raw_input('')
+		input('')
 
 class ModelCrossCheck(unittest.TestCase):
 	def test0_sanity(self):
@@ -119,7 +119,7 @@ ph = 2.0*np.pi*np.arange(1000)/1000.0
 		""")
 
 		t1_min = min(t1.repeat(3, 100))/100
-		print u"test1_speed(): transit_model_dp7 %.3g ms/it" % (t1_min*1000)
+		print("test1_speed(): transit_model_dp7 %.3g ms/it" % (t1_min*1000))
 
 def plotcomp(lclist, fignum, title, pause=True):
 	"""
@@ -133,7 +133,7 @@ def plotcomp(lclist, fignum, title, pause=True):
 	for lc in lclist:
 		plt.plot(lc)
 	if (pause):
-		raw_input('')
+		input('')
 
 class ModelParamsPlot(unittest.TestCase):
 	# transit_model_dp7(ph, sr=10.36, ep=5.13, ca=0.03, g=0.875, om=0.654, nmodel=400, method=0, verb=0, plot=0)

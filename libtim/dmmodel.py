@@ -63,13 +63,13 @@ def read_actmap(actmapf, verb=0):
 	if (amap.ndim < 2):
 		raise ValueError("Error: actuator map should be 2D!")
 	elif (amap.ndim == 3):
-		print "Warning: shape ", amap.ndim ,"-dimensional:", amap.shape
+		print("Warning: shape ", amap.ndim ,"-dimensional:", amap.shape)
 		# Select two dimensions that are equal and larger than 10
 		if (amap.shape[0] > 10 and amap.shape[0] == amap.shape[1]):
 			amap = amap[:,:,0]
 		elif (amap.shape[1] > 10 and amap.shape[1] == amap.shape[2]):
 			amap = amap[0,:,:]
-		print "Now taking: shape ", amap.ndim ,"-dimensional:", amap.shape
+		print("Now taking: shape ", amap.ndim ,"-dimensional:", amap.shape)
 	elif (amap.ndim > 3):
 		raise ValueError("Error: actuator map should be 2D!")
 
@@ -78,11 +78,11 @@ def read_actmap(actmapf, verb=0):
 	min_nonzero = amap[amap > 0].min()
 	if (min_nonzero < 1):
 		amap = np.round(amap/min_nonzero)
-		if (verb > 1): print "dmmodel.read_actmap(): minimum < 1, scaling"
+		if (verb > 1): print("dmmodel.read_actmap(): minimum < 1, scaling")
 	
 	if (amap.max() >= 255.0):
 		amap[amap == 255] = 0
-		if (verb > 1): print "dmmodel.read_actmap(): found 255, zeroing"
+		if (verb > 1): print("dmmodel.read_actmap(): found 255, zeroing")
 	
 	return amap
 
@@ -107,7 +107,7 @@ def parse_volts(mirror_actmap, mirror_volts, voltfunc=lambda involt: ((involt/25
 		thisvolt = voltfunc(actvolt)
 		mirror_actmap[thismask] = thisvolt
 		if (verb > 0 and actvolt != 0):
-			print "dmmodel.parse_volts(): act %d (n=%d) @ %g" % (actid, thismask.sum(), thisvolt)
+			print("dmmodel.parse_volts(): act %d (n=%d) @ %g" % (actid, thismask.sum(), thisvolt))
 	
 	return mirror_actmap
 
@@ -192,7 +192,7 @@ def sim_dm(mirror_actmap, mirror_apt, docrop=True, verb=0):
 
 	mirror_resp *= mirror_apt
 	
-	if (verb > 2): print "dmmodel.sim_dm(): niter=%d, final sdif=%g" % (return_val, sdif)
+	if (verb > 2): print("dmmodel.sim_dm(): niter=%d, final sdif=%g" % (return_val, sdif))
 	
 	cropmask = (slice(None), slice(None))
 	if (docrop):
@@ -202,7 +202,7 @@ def sim_dm(mirror_actmap, mirror_apt, docrop=True, verb=0):
 		apt_max1 = mirror_apt.max(axis=1)
 		crop1 = slice(np.argwhere(apt_max1 > 0)[0], np.argwhere(apt_max1 > 0)[-1]+1, 1)
 		cropmask = (crop0, crop1)
-		if (verb > 2): print "dmmodel.sim_dm(): cropmask:", cropmask
+		if (verb > 2): print("dmmodel.sim_dm(): cropmask:", cropmask)
 	
 	return mirror_resp[cropmask]
 

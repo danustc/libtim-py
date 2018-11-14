@@ -11,8 +11,8 @@
 
 import unittest
 import numpy as np
-import fft as _fft
-from xcorr import *
+from . import fft as _fft
+from .xcorr import *
 from timeit import Timer
 
 SHOWPLOTS=1
@@ -101,7 +101,7 @@ class TestShift(unittest.TestCase):
 			plt.clf()
 			plt.title("Fourier-shifted by (%.3g, %.3g)" % sh)
 			plt.imshow(im_sh2, extent=plrn)
-			raw_input()
+			input()
 
 class TestGaussFuncs(unittest.TestCase):
 	def setUp(self):
@@ -130,7 +130,7 @@ class TestGaussFuncs(unittest.TestCase):
 
 	def test2a_timing(self):
 		"""Test timing for two functions"""
-		print "test2a_timing(): timings in msec/iter"
+		print("test2a_timing(): timings in msec/iter")
 		for sz in self.sz_l[:1]:
 			for spsz in self.spotsz_l:
 				for pos in self.pos_l:
@@ -152,7 +152,7 @@ a=gauss(sz, spsz, pos, amp, noi)
 					""", setup_str)
 					t_g1 = 1000*min(t1.repeat(3, self.niter))/self.niter
 					t_g2 = 1000*min(t2.repeat(3, self.niter))/self.niter
-					print "test2a_timing(): sz:", sz, "g1: %.3g, g2: %.3g, speedup: %.3g" % (t_g1, t_g2, t_g1/t_g2)
+					print("test2a_timing(): sz:", sz, "g1: %.3g, g2: %.3g, speedup: %.3g" % (t_g1, t_g2, t_g1/t_g2))
 
 
 class TestSubpixmax(unittest.TestCase):
@@ -363,7 +363,7 @@ class PlotXcorr(BaseXcorr):
 					corr = np.r_[corr]
 					vec = calc_subpixmax(corr, offset=np.r_[corr.shape]/2)
 					plt.plot([shi[0]-shj[0]-vec[0]], [shi[1]-shj[1]-vec[1]], '*')
-			raw_input()
+			input()
 
 if __name__ == "__main__":
 	import sys

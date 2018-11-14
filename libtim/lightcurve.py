@@ -202,15 +202,15 @@ def stellar_detrend(mflux, mtime, fluxerr, phase, mask=slice(None), opoly=2, osp
 			nojump.append(thisjump)
 
 	if (verb >= VERB_DEBG):
-		print "Found %d/%d flux jumps are significant" % (sum(fjumpidx)-len(nojump), sum(fjumpidx))
+		print("Found %d/%d flux jumps are significant" % (sum(fjumpidx)-len(nojump), sum(fjumpidx)))
 	fjumpidx[nojump] = False
 
 	# Inspect flux jumps manually
 	if (False and plot & PLOT_INTERACTIVE):
 		for jump in np.argwhere(fjumpidx):
-			print "Flux jump @ %d (showing %d--%d)" % (jump, max(jump-25, 0), jump+25)
+			print("Flux jump @ %d (showing %d--%d)" % (jump, max(jump-25, 0), jump+25))
 			if (jump in np.argwhere(tjumpidx)):
-				print "Skipping flux jump, also time jump"
+				print("Skipping flux jump, also time jump")
 				continue
 			plt.figure(40)
 			plt.clf()
@@ -227,17 +227,17 @@ def stellar_detrend(mflux, mtime, fluxerr, phase, mask=slice(None), opoly=2, osp
 			plt.plot(ftime_right, fdat_right)
 			plt.ylabel("Flux")
 			plt.xlabel("Time [data]")
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 
 	# Add time-jumps now
 	if (verb >= VERB_DEBG):
-		print "Found %d time jumps" % sum(np.abs(tjump) > 0.05)
+		print("Found %d time jumps" % sum(np.abs(tjump) > 0.05))
 	jumpidx = fjumpidx + tjumpidx
 	
 	# Inspect time jumps manually
 	if (False and plot & PLOT_INTERACTIVE):
 		for jump in np.argwhere(jumpidx):
-			print "Time jump @ %d (showing %d--%d)" % (jump, max(jump-25, 0), jump+25)
+			print("Time jump @ %d (showing %d--%d)" % (jump, max(jump-25, 0), jump+25))
 			plt.figure(40)
 			plt.clf()
 			fdat_left = mflux[max(jump-25, 0):jump]
@@ -253,7 +253,7 @@ def stellar_detrend(mflux, mtime, fluxerr, phase, mask=slice(None), opoly=2, osp
 			plt.plot(ftime_right, fdat_right)
 			plt.ylabel("Flux")
 			plt.xlabel("Time [days]")
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 
 	# Group data based on these jumps. cumsum() will add 1 each time jumpidx 
 	# is True, giving a 0-based index for each group
@@ -275,7 +275,7 @@ def stellar_detrend(mflux, mtime, fluxerr, phase, mask=slice(None), opoly=2, osp
 		idx = np.argwhere(groupids==gid).ravel()
 		n = len(idx)
 		midx = np.intersect1d(idx, maskidx)
-		if (verb >= VERB_DEBG): print "Working on group=%d, n=%d" % (gid, n)
+		if (verb >= VERB_DEBG): print("Working on group=%d, n=%d" % (gid, n))
 
 		# Calculate median
 		if (n < 10): 
@@ -319,7 +319,7 @@ def stellar_detrend(mflux, mtime, fluxerr, phase, mask=slice(None), opoly=2, osp
 				#plt.plot(mtime[idx], smooth_spl(mtime[idx]), ':')
 
 	if (plot & PLOT_INTERACTIVE):
-		raw_input("Press any key to continue...")
+		input("Press any key to continue...")
 	
 	# Return data fit
 	return fluxoff
@@ -421,7 +421,7 @@ def transit_model_dp7(phase, sr=9.9085, ep=5.44, ca=0.0320, g=0.894, om=0.49, nm
 		plt.plot(azim_ph, lc0)
 		plt.title("Light curve")
 		if (plot & PLOT_INTERACTIVE):
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 	
 	# Scattering part: HG function normalized by the solid angle.
 	
@@ -460,7 +460,7 @@ def transit_model_dp7(phase, sr=9.9085, ep=5.44, ca=0.0320, g=0.894, om=0.49, nm
 		plt.legend(loc='lower right')
 		plt.title("Light curve")
 		if (plot & PLOT_INTERACTIVE):
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 	
 	# Convolve with exposure time (dt = 29.4 minutes). Half of the box
 	# width is given by dt/period*!pi = 0.098225 radians.
@@ -497,7 +497,7 @@ def transit_model_dp7(phase, sr=9.9085, ep=5.44, ca=0.0320, g=0.894, om=0.49, nm
 		plt.title("Light curve")
 		plt.legend(loc='lower right')
 		if (plot & PLOT_INTERACTIVE):
-			raw_input("Press any key to continue...")
+			input("Press any key to continue...")
 
 	# If phase is not given, return the raw lightcurve:	
 	if (not len(phase)):

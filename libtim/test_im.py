@@ -11,7 +11,7 @@
 Test libtim.im
 """
 
-from im import *
+from .im import *
 import unittest
 import pylab as plt
 
@@ -48,7 +48,7 @@ class TestUtilFuncs(unittest.TestCase):
 			plt.title("test0c_mkradmask_offset 1")
 			plt.imshow(test_mask)
 			plt.colorbar()
-			raw_input("test0c_mkradmask_offset 1...")
+			input("test0c_mkradmask_offset 1...")
 
 		self.assertEqual(test_mask[0,  0 ],  0.0)
 		self.assertEqual(test_mask[64, 0 ],  1.0)
@@ -62,7 +62,7 @@ class TestUtilFuncs(unittest.TestCase):
 			plt.title("test0c_mkradmask_offset 2")
 			plt.imshow(test_mask)
 			plt.colorbar()
-			raw_input("test0c_mkradmask_offset 2...")
+			input("test0c_mkradmask_offset 2...")
 		self.assertEqual(test_mask[256, 256], 0.0)
 		self.assertEqual(test_mask[128, 256], 1.0)
 		self.assertEqual(test_mask[128, 128], 2.0**0.5)
@@ -105,7 +105,7 @@ class TestUtilFuncs(unittest.TestCase):
 				plt.title("test1a_mkradmask_offset @ %s" %str(c))
 				plt.imshow(test_mask)
 				plt.colorbar()
-				raw_input("test1a_mkradmask_offset @ %s..." %str(c))
+				input("test1a_mkradmask_offset @ %s..." %str(c))
 
 			self.assertEqual(test_mask[c], test_mask.min())
 
@@ -162,7 +162,7 @@ class TestStoreData(unittest.TestCase):
 		inter_imshow(self.im1, "random rectangle", cmap='YlOrBr', dowait=False)
 		inter_imshow(self.im2, "wavy square", cmap='YlOrBr', dowait=False)
 
-		raw_input()
+		input()
 
 	def test1a_store_error(self):
 		"""Store images as FITS and PDF, check for errors"""
@@ -281,7 +281,7 @@ class TestDarkFlatfield(unittest.TestCase):
 
 	def test3c_random(self):
 		"""Check with random data as input, flatfield and darkfield"""
-		for iter in xrange(10):
+		for iter in range(10):
 			indat = np.round(np.random.random(self.sz)*100)
 			ffdat = np.round(np.random.random(self.sz)*100)
 			dfdat = np.round(np.random.random(self.sz)*100)

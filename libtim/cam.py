@@ -8,8 +8,8 @@
 @copyright Copyright (c) 2013 Tim van Werkhoven (werkhoven@strw.leidenuniv.nl)
 """
 
-import file
-import im
+from . import file
+from . import im
 import cv
 import os
 import numpy as np
@@ -45,7 +45,7 @@ def cam_setup(camidx=0, roi=None, flatf=None, darkf=None, maskshape='all', procd
 
 	global CAM_CFG
 
-	if (verb&VERB_M > L_INFO):  print "Setting up camera..."
+	if (verb&VERB_M > L_INFO):  print("Setting up camera...")
 
 	if (procd == 64): 
 		npdtype = np.float64
@@ -55,7 +55,7 @@ def cam_setup(camidx=0, roi=None, flatf=None, darkf=None, maskshape='all', procd
 		cvdtype = cv.IPL_DEPTH_32F
 
 	if (darkf and os.path.isfile(darkf)):
-		if (verb&VERB_M > L_DEBG): print "Processing dark frames..."
+		if (verb&VERB_M > L_DEBG): print("Processing dark frames...")
 		# Hard-link to used files for new cache
 		newdarkf = pjoin(outdir, CAM_DARKFIELD)
 		if (os.path.exists(newdarkf)):
@@ -64,19 +64,19 @@ def cam_setup(camidx=0, roi=None, flatf=None, darkf=None, maskshape='all', procd
 		darkim = file.read_file(darkf).astype(npdtype)
 		CAM_CFG['dark'] = cv.fromarray(darkim)
 	if (flatf and os.path.isfile(flatf)):
-		if (verb&VERB_M > L_DEBG): print "Processing flat frame(s)..."
+		if (verb&VERB_M > L_DEBG): print("Processing flat frame(s)...")
 		newflatf = pjoin(outdir, CAM_FLATFIELD)
 		if (os.path.exists(newflatf)):
 			os.unlink(newflatf)
 		os.link(flatf, newflatf)
 		flatim = file.read_file(flatf).astype(npdtype)
 		CAM_CFG['flat'] = cv.fromarray(flatim)
-  		if (CAM_CFG.has_key('dark')):
+  		if ('dark' in CAM_CFG):
   			cv.Sub(CAM_CFG['flat'], CAM_CFG['dark'], CAM_CFG['flat'])
 
-	if (verb&VERB_M > L_XNFO):  print "Configuring camera..."
+	if (verb&VERB_M > L_XNFO):  print("Configuring camera...")
 
-	if (not CAM_CFG.has_key('window')):
+	if ('window' not in CAM_CFG):
 		CAM_CFG['window'] = 'cam_live'
 	cv.NamedWindow(CAM_CFG['window'], cv.CV_WINDOW_AUTOSIZE)
 	cv.NamedWindow("cam_histogram", cv.CV_WINDOW_AUTOSIZE)
@@ -109,7 +109,7 @@ def cam_setup(camidx=0, roi=None, flatf=None, darkf=None, maskshape='all', procd
 
 	file.store_file(pjoin(outdir, CAM_APTMASK), CAM_CFG['mask'].astype(np.uint8), clobber=True)
 
-	if (verb&VERB_M > L_INFO):  print "Camera setup complete..."
+	if (verb&VERB_M > L_INFO):  print("Camera setup complete...")
 
 	cam_getimage(show=True)
 
@@ -139,7 +139,7 @@ def cam_getimage(show=False, dfcorr=True, raw=False, showhisto=True, waitkey=25)
 	# Downscale color images
 	if (rawframe.channels > 1):
 		rawsz = cv.GetSize(rawframe)
-		if (not CAM_CFG.has_key('rawyuv') or not CAM_CFG['rawyuv']): 
+		if ('rawyuv' not in CAM_CFG or not CAM_CFG['rawyuv']): 
 			CAM_CFG['rawyuv'] = cv.CreateImage(rawsz, rawframe.depth, 3)
 			CAM_CFG['rawgray'] = cv.CreateImage(rawsz, rawframe.depth, 1)
 		cv.CvtColor(rawframe, CAM_CFG['rawyuv'], cv.CV_BGR2YCrCb)
@@ -155,9 +155,9 @@ def cam_getimage(show=False, dfcorr=True, raw=False, showhisto=True, waitkey=25)
 	if (raw):
 		return cv.CloneImage(procf)
 
-	if (CAM_CFG.has_key('dark') and dfcorr):
+	if ('dark' in CAM_CFG and dfcorr):
 		cv.Sub(procf, CAM_CFG['dark'], procf)
-	if (CAM_CFG.has_key('flat') and dfcorr):
+	if ('flat' in CAM_CFG and dfcorr):
 		cv.Div(procf, CAM_CFG['flat'], procf)
 	# We *don't* apply the aperture mask here because we might need the data
 	
@@ -203,19 +203,19 @@ def cam_measurebulk(nframes=100, interactive=True, show=True, norm=False, verb=0
 	"""
 
 	if (verb&VERB_M > L_INFO):
-		print "Measuring bulk (n=%d)..." % (nframes)
+		print("Measuring bulk (n=%d)..." % (nframes))
 
 	if (interactive):
-		print "Will measure bulk now, press c to continue..."
+		print("Will measure bulk now, press c to continue...")
 		while (True):
 			cam_getimage(show=True, waitkey=0)
 			if (chr(cv.WaitKey(1) & 255) == "c"):
-				print "ok!"
+				print("ok!")
 				break
 
 	bulkimg = cam_getimage(show=False, dfcorr=False, raw=True)
 
-	for dummy in xrange(nframes-1):
+	for dummy in range(nframes-1):
 		cv.Add(bulkimg, cam_getimage(show=False, dfcorr=False, raw=True), bulkimg)
 
 	if (norm):

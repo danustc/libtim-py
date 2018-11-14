@@ -14,8 +14,8 @@ http://creativecommons.org/licenses/by-sa/3.0/
 """
 
 # Import local libs
-from fringe import *
-import shwfs
+from .fringe import *
+from . import shwfs
 
 # Import other libs
 from timeit import Timer
@@ -128,7 +128,7 @@ class TestFringecal(unittest.TestCase):
 		plt.plot(cfreq0[1], cfreq0[0], "^", label='para') # Parabolic interpolation
 		plt.plot(cfreq1[1], cfreq1[0], "*", label='cog') # Center of gravity
 		plt.legend(loc='best')
-		raw_input("Continue...")
+		input("Continue...")
 		plt.close()
 
 	def test3b_cal_qual(self):
@@ -253,7 +253,7 @@ class TestFiltersb(unittest.TestCase):
 			im = ax3.imshow(dphase*apt_mask9)
 			plt.colorbar(im)
 
-			if (raw_input("Continue [b=break]...") == 'b'): break
+			if (input("Continue [b=break]...") == 'b'): break
 		plt.close()
 
 	def test2_filtersb_test_real(self):
@@ -288,7 +288,7 @@ class TestFiltersb(unittest.TestCase):
 			ax3 = plt.subplot2grid((2,2),(1, 1))
 			ax3.set_title("amplitude")
 			ax3.imshow(phase[1])
-			if (raw_input("Continue [b=break]...") == 'b'): break
+			if (input("Continue [b=break]...") == 'b'): break
 		plt.close()
 
 class TestAvgphase(unittest.TestCase):
@@ -333,7 +333,7 @@ class TestAvgphase(unittest.TestCase):
 			plt.imshow(self.fringes[2])
 			plt.subplot(224)
 			plt.imshow(self.fringes[3])
-			raw_input("Continue...")
+			input("Continue...")
 		for i in [100, 200, 201, 202, 203]:
 			plt.close(i)
 
@@ -379,11 +379,11 @@ class TestAvgphase(unittest.TestCase):
 			plt.title("Phase difference")
 			plt.imshow(dphase*self.nan_mask, vmin=vmin/10., vmax=vmax/10.)
 			plt.colorbar()
-			raw_input("Continue...")
+			input("Continue...")
 
 		# @todo This assert is probably very dependent on: noise, nfr and 
 		# the phase itself
-		print "residual RMS/phase RMS", dphasev.std()/phase[self.apt_maskb].std()
+		print("residual RMS/phase RMS", dphasev.std()/phase[self.apt_maskb].std())
 		self.assertLess(np.abs(dphasev).std(), vmax/10.)
 
 	def test1_test_avg_weighted(self):
@@ -427,11 +427,11 @@ class TestAvgphase(unittest.TestCase):
 			plt.title("Phase difference")
 			plt.imshow(dphase*self.nan_mask, vmin=vmin/10., vmax=vmax/10.)
 			plt.colorbar()
-			raw_input("Continue...")
+			input("Continue...")
 
 		# @todo This assert is probably very dependent on: noise, nfr and 
 		# the phase itself
-		print "residual RMS/phase RMS", dphasev.std()/phase[self.apt_maskb].std()
+		print("residual RMS/phase RMS", dphasev.std()/phase[self.apt_maskb].std())
 		self.assertLess(np.abs(dphasev).mean(), vmax/10.)
 
 class TestGradphase(unittest.TestCase):
@@ -516,7 +516,7 @@ class TestGradphase(unittest.TestCase):
 			plt.title("Grad 1")
 			plt.imshow(phgrad[1])
 			plt.colorbar()
-			raw_input("Continue...")
+			input("Continue...")
 
 	def test1a_zern_rec(self):
 		"""Test phase gradient calculation and recovery from Zernike phases"""
@@ -557,7 +557,7 @@ class TestGradphase(unittest.TestCase):
 				plt.subplot(224)
 				plt.title("Zvec diff")
 				plt.plot(zvec[1:]-zngrad_vec[1:], 'o')
-				if (raw_input("Continue [b=break]...") == 'b'): break
+				if (input("Continue [b=break]...") == 'b'): break
 
 			np.testing.assert_allclose(zvec[1:], zngrad_vec[1:])
 
@@ -627,7 +627,7 @@ class TestGradphase(unittest.TestCase):
 			plt.ylabel("Amplitude [unit rms]")
 			plt.legend()
 
-			if (raw_input("Continue [b=break]...") == 'b'): break
+			if (input("Continue [b=break]...") == 'b'): break
 
 	def test2a_data_fringe_rec(self):
 		"""Test phase gradient calculation on data fringes"""
@@ -664,7 +664,7 @@ class TestGradphase(unittest.TestCase):
 		plt.errorbar(nz+0.1, np.mean(zvecs_regw,0), yerr=np.std(zvecs_regw,0), elinewidth=3, fmt='.', label='Reg. wt.')
 		plt.legend(loc='best')
 
-		print "Dropping to shell for data inspection..."
+		print("Dropping to shell for data inspection...")
 		tim.shell()
 
 class TestCalcPhaseVec(unittest.TestCase):
@@ -798,13 +798,13 @@ rnd = np.random.random
 fakewaves = [rnd(sz) + rnd(sz)*1j for i in range(4)]
 fakemat = rnd((np.product(sz), 20))""")
 
-		print "calc_phasevec(): timing results:"
+		print("calc_phasevec(): timing results:")
 		t_scalar = 1e3*min(t1.repeat(2, 10))/10
-		print "calc_phasevec(): scalar %.3g msec/it" % (t_scalar)
+		print("calc_phasevec(): scalar %.3g msec/it" % (t_scalar))
 		t_gradient = 1e3*min(t2.repeat(2, 10))/10
-		print "calc_phasevec(): gradient %.3g msec/it" % (t_gradient)
+		print("calc_phasevec(): gradient %.3g msec/it" % (t_gradient))
 		t_vshwfs = 1e3*min(t3.repeat(2, 10))/10
-		print "calc_phasevec(): vshwfs %.3g msec/it" % (t_vshwfs)
+		print("calc_phasevec(): vshwfs %.3g msec/it" % (t_vshwfs))
 
 
 

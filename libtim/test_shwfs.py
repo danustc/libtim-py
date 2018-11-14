@@ -11,7 +11,7 @@
 Testcases for shwfs.py library.
 """
 
-from shwfs import *
+from .shwfs import *
 import unittest
 import pylab as plt
 

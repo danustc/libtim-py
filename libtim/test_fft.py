@@ -11,7 +11,7 @@
 Testcases for fft.py library.
 """
 
-from fft import *
+from .fft import *
 import unittest
 import libtim as tim
 import pylab as plt
@@ -107,7 +107,7 @@ class TestApodMask(unittest.TestCase):
 	def setUp(self):
 		"""Define some constants for apodisation mask test case"""
 		self.sz = (257, 509, 7)
-		self.szlist = [self.sz[:n+1] for n in xrange(len(self.sz))]
+		self.szlist = [self.sz[:n+1] for n in range(len(self.sz))]
 		self.wsz_l = [-0.0, -0.1, -0.3, -0.7, -1.0]
 		self.wshp_l = ['hann', 'hamming', 'cosine', 'lanczos']
 
@@ -181,56 +181,56 @@ class TestApodMask(unittest.TestCase):
 		"""Test if illegal apod_f raises error"""
 
 		for sz in self.szlist:
-			with self.assertRaisesRegexp(ValueError, ".*apod_f.*not supported!"):
+			with self.assertRaisesRegex(ValueError, ".*apod_f.*not supported!"):
 				mk_apod_mask(sz, apod_f="not a function")
 		for sz in self.szlist:
-			with self.assertRaisesRegexp(ValueError, ".*apod_f.*should be.*"):
+			with self.assertRaisesRegex(ValueError, ".*apod_f.*should be.*"):
 				mk_apod_mask(sz, apod_f=[1])
 
 	def test4b_shape_err(self):
 		"""Test if illegal shape raises error"""
 
 		for sz in self.szlist:
-			with self.assertRaisesRegexp(ValueError, "<shape> should be.*"):
+			with self.assertRaisesRegex(ValueError, "<shape> should be.*"):
 				mk_apod_mask(sz, shape="not a shape")
 		for sz in self.szlist:
-			with self.assertRaisesRegexp(ValueError, ".*should be a string!"):
+			with self.assertRaisesRegex(ValueError, ".*should be a string!"):
 				mk_apod_mask(sz, shape=1)
 
 class PlotApodMask(unittest.TestCase):
 	def setUp(self):
 		"""Define some constants for apodisation mask test case"""
 		self.sz = (257, 509, 7)
-		self.szlist = [self.sz[:n+1] for n in xrange(len(self.sz))]
+		self.szlist = [self.sz[:n+1] for n in range(len(self.sz))]
 		self.wsz_l = [-0.0, -0.3, -1.0]
 		self.wshp_l = ['hann', 'hamming', 'cosine', 'lanczos']
 
 	# Display functions (if all else succeeded)
 	def test0a_dummy(self):
 		"""Dummy test"""
-		print "This is PlotApodMask()"
+		print("This is PlotApodMask()")
 
 	def test4a_plotmasks(self):
 		"""Plot some default masks"""
 		if (not SHOWPLOTS): return
-		print "Plotting default masks"
+		print("Plotting default masks")
 		for sz in self.szlist:
 			thismask = mk_apod_mask(sz)
 			if len(sz) == 1:
 				plt.clf()
 				plt.title("test4a_plotmasks 1d default")
 				plt.plot(thismask)
-				raw_input()
+				input()
 			elif len(sz) == 2:
 				plt.clf()
 				plt.title("test4a_plotmasks 2d default")
 				plt.imshow(thismask, interpolation='nearest')
 				plt.colorbar()
-				raw_input()
+				input()
 
 	def test4b_plot_wsizes(self):
 		"""Plot different 1-d window sizes and shapes"""
-		print "Plot different 1-d window functions sizes and shapes"
+		print("Plot different 1-d window functions sizes and shapes")
 		if (not SHOWPLOTS): return
 		sz = self.szlist[0]
 		for wsz in self.wsz_l:
@@ -240,7 +240,7 @@ class PlotApodMask(unittest.TestCase):
 				thismask = mk_apod_mask(sz, apod_f=func, wsize=wsz)
 				plt.plot(thismask, label=func)
 			plt.legend()
-			raw_input()
+			input()
 
 	def test4c_plot_apodsizes(self):
 		"""Plot different 1-d window functions"""
@@ -253,11 +253,11 @@ class PlotApodMask(unittest.TestCase):
 				thismask = mk_apod_mask(sz, apodsz=apodsz, apod_f=func)
 				plt.plot(thismask, label=func)
 			plt.legend()
-			raw_input()
+			input()
 
 	def test4d_plot_2dcirc(self):
 		"""Plot different 2-d circular windows with varying pos and size"""
-		print "Plot different 2-d circular windows with varying pos and size"
+		print("Plot different 2-d circular windows with varying pos and size")
 		if (not SHOWPLOTS): return
 		sz = self.szlist[1]
 		plt.figure(1)
@@ -269,7 +269,7 @@ class PlotApodMask(unittest.TestCase):
 				thismask = mk_apod_mask(sz, apodpos, apodsz, wsize=-1, shape='circ')
 				plt.imshow(thismask, interpolation='nearest')
 				plt.title('pos=%g, size=%g' % (apodpos, apodsz))
-		raw_input()
+		input()
 
 if __name__ == "__main__":
 	import sys
