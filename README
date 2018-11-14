@@ -1,4 +1,5 @@
-libtim-py: miscellaneous data manipulation utils
+### libtim-py: miscellaneous data manipulation utils
+#### forked from [tvwerkhoven/libtim-py](https://github.com/tvwerkhoven/libtim-py); updated to Python 3 version by [danustc](https://github.com/danustc)
 ================================================
 
 About
