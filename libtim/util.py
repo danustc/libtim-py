@@ -21,7 +21,7 @@ filenames, making headers etc.
 import sys
 import os
 import hashlib
-import pyfits
+import astropy.io.fits as pyfits
 from time import asctime, gmtime, time, localtime
 import pickle
 import json

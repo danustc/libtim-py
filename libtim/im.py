@@ -19,7 +19,7 @@ Image manipulation functions.
 
 import os, sys
 import getpass
-import pyfits
+import astropy.io.fits as pyfits
 import numpy as np
 from matplotlib.figure import Figure
 from matplotlib import cm

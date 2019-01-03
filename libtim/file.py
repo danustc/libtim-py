@@ -19,7 +19,7 @@ This module provides some file IO functions.
 
 import matplotlib.image as mpimg
 import numpy as np
-import pyfits
+import astropy.io.fits as pyfits
 import json
 import pickle
 import string
